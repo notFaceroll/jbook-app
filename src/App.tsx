@@ -1,6 +1,7 @@
 import * as esbuild from "esbuild-wasm";
 import React, { useEffect, useState } from "react";
 import { unpkgPathPlugin } from "./plugins/unpkg-path-plugins";
+import { fetchPlugin } from "./plugins/fetch-plugin";
 
 function App() {
   const [input, setInput] = useState("");
@@ -10,7 +11,7 @@ function App() {
     try {
       const service = await esbuild.initialize({
         worker: true,
-        wasmURL: "/esbuild.wasm",
+        wasmURL: "https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm",
       });
       console.log(service);
     } catch (err) {}
@@ -30,11 +31,11 @@ function App() {
         entryPoints: ["index.js"],
         bundle: true,
         write: false,
-        plugins: [unpkgPathPlugin()],
+        plugins: [unpkgPathPlugin(), fetchPlugin(input)],
         define: {
-          'process.env.NODE_ENV': '"production"',
-          global: 'window',
-        }
+          "process.env.NODE_ENV": '"production"',
+          global: "window",
+        },
       });
       console.log(res);
       setCode(res.outputFiles[0].text);
