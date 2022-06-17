@@ -1,17 +1,18 @@
 import * as esbuild from "esbuild-wasm";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { unpkgPathPlugin } from "./plugins/unpkg-path-plugins";
 import { fetchPlugin } from "./plugins/fetch-plugin";
 
 function App() {
   const [input, setInput] = useState("");
-  const [code, setCode] = useState("");
+  const iframe = useRef<any>();
 
   const startService = async () => {
     try {
       const service = await esbuild.initialize({
         worker: true,
-        wasmURL: "https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm",
+        // wasmURL: "/esbuild.wasm",
+        wasmURL: "https://unpkg.com/esbuild-wasm@0.14.39/esbuild.wasm",
       });
       console.log(service);
     } catch (err) {}
@@ -27,6 +28,8 @@ function App() {
       //   loader: "jsx",
       //   target: "es2015",
       // });
+      iframe.current.srcdoc = html;
+
       const res = await esbuild.build({
         entryPoints: ["index.js"],
         bundle: true,
@@ -37,12 +40,34 @@ function App() {
           global: "window",
         },
       });
-      console.log(res);
-      setCode(res.outputFiles[0].text);
+      iframe.current.contentWindow.postMessage(res.outputFiles[0].text, "*");
     } catch (err) {
       console.error(err);
     }
   };
+
+  // Creating an element to receive the script tag
+  // and avoid escaped code, passing it to the iframe
+  const html = `
+    <html>
+      <head></head>
+      <body>
+       <div id="root"></div>
+       <script>
+       window.addEventListener('message', (event) => {
+        try {
+
+          eval(event.data);
+        } catch (err) {
+          const root = document.querySelector('#root');
+          root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>';
+          console.error(err);
+        }
+       }, false);
+       </script>
+      </body>
+    </html>
+  `;
 
   return (
     <div>
@@ -55,7 +80,12 @@ function App() {
       <div>
         <button onClick={onClick}>Submit</button>
       </div>
-      <pre>{code}</pre>
+      <iframe
+        title="preview"
+        ref={iframe}
+        srcDoc={html}
+        sandbox="allow-scripts"
+      />
     </div>
   );
 }
