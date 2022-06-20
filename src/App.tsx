@@ -1,7 +1,9 @@
+import "bulmaswatch/superhero/bulmaswatch.min.css";
 import * as esbuild from "esbuild-wasm";
 import React, { useEffect, useRef, useState } from "react";
 import { unpkgPathPlugin } from "./plugins/unpkg-path-plugins";
 import { fetchPlugin } from "./plugins/fetch-plugin";
+import CodeEditor from "./components/code-editor";
 
 function App() {
   const [input, setInput] = useState("");
@@ -71,6 +73,12 @@ function App() {
 
   return (
     <div>
+      <CodeEditor
+        initialValue="const hey = 'hello world';"
+        onChange={(value) => {
+          setInput(value);
+        }}
+      />
       <textarea
         value={input}
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
