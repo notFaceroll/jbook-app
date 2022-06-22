@@ -1,5 +1,5 @@
 import "./code-editor.css";
-import MonacoEditor, { OnChange, OnMount } from "@monaco-editor/react";
+import MonacoEditor, { OnMount } from "@monaco-editor/react";
 import prettier from "prettier";
 import parser from "prettier/parser-babel";
 import { useRef } from "react";
@@ -20,11 +20,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
     });
   };
 
-  const onEditorDidChange: OnChange = (value, ev) => {
-    if (value !== undefined) {
-      onChange(value);
-    }
-  };
+  // const onEditorDidChange: OnChange = (value, ev) => {
+  //   if (value !== undefined) {
+  //     onChange(value);
+  //   }
+  // };
 
   const onFormatClick = () => {
     // get current value from editor
@@ -71,7 +71,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
           tabSize: 2,
         }}
         language="javascript"
-        height="500px"
+        height="100%"
       />
     </div>
   );
