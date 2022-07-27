@@ -1,4 +1,4 @@
-# jsbook app 🗒️
+# jbook app 🗒️
 
 ## Built with
 - Typescript
