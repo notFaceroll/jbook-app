@@ -1,8 +1,7 @@
 # jbook app 🗒️
 
 ## WIP
-This is pretty much a work in progress and has a couple missing features.
-I started doing this under guidance as a way to learn/improve typescript
+This is pretty much a work in progress and has a couple missing features. I did this following a Typescript course available on Udemy made by Stephen Grider.
 
 
 ## Built with
@@ -14,7 +13,7 @@ I started doing this under guidance as a way to learn/improve typescript
 - react-resizable
 - bulmaswatch for styles
 
-## TODO:
+## TODO
 - Data Persistence;
 - Fix the bug causing the rendered code inside the iframe disappear when moving the window down;
 - Feature to save the text/code into a md/json file (exporting);
